@@ -34,20 +34,39 @@ tailwind.config.js  theme (colors, etc.)
 
 ## Build an APK locally (no EAS cloud)
 
-### One-time machine setup (Linux)
+### One-time machine setup (Linux, no Android Studio needed)
+
+You only need the Android SDK. Android Studio is optional; it's only useful if you want a GUI emulator.
 
 1. **JDK 17** (React Native recommends 17; newer JDKs can fail):
    ```bash
-   sudo apt install openjdk-17-jdk
+   sudo apt install openjdk-17-jdk unzip
    ```
-2. **Android SDK**: install Android Studio. In SDK Manager, install *Android SDK Platform 35*, *Build-Tools 36*, *Command-line Tools* and *NDK (Side by side)*.
+2. **Android command-line tools**: download "Command line tools only" for Linux from
+   https://developer.android.com/studio#command-tools, then:
+   ```bash
+   mkdir -p ~/Android/Sdk/cmdline-tools
+   unzip ~/Downloads/commandlinetools-linux-*_latest.zip -d ~/Android/Sdk/cmdline-tools
+   mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
+   ```
+   `sdkmanager` only runs from `cmdline-tools/latest/bin`, which is why the folder is renamed.
 3. Add to `~/.bashrc`, then run `source ~/.bashrc`:
    ```bash
    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
    export ANDROID_HOME=$HOME/Android/Sdk
-   export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator
+   export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
    ```
-4. **EAS CLI**: `npm i -g eas-cli`, then `eas login` (free account).
+4. **SDK packages and licenses:**
+   ```bash
+   sdkmanager "platform-tools" "platforms;android-35" "build-tools;36.0.0"
+   yes | sdkmanager --licenses
+   ```
+   With the licenses accepted, Gradle downloads anything else on the first build, such as the NDK and CMake.
+5. **EAS CLI** (only for Option A): `npm i -g eas-cli`, then `eas login` (free account).
+
+Check the setup with `java -version` (should be 17), `sdkmanager --list_installed` and `adb devices` (your phone should appear with USB debugging on).
+
+**Disk space** (approximate): the SDK takes ~3 GB, including the ~2–2.5 GB NDK. The Gradle cache in `~/.gradle` takes another ~1.5–3 GB, so plan for **6–8 GB free**. The first build downloads ~1.5–2 GB. To reclaim space, run `rm -rf ~/.gradle/caches` (it re-downloads on the next build).
 
 ### Option A: EAS local build (uses `eas.json`)
 
