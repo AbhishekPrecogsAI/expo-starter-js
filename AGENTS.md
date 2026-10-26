@@ -10,6 +10,7 @@ This is an Expo/React Native mobile application. Prioritize mobile-first pattern
   - Don't upgrade to NativeWind v5 or Tailwind v4 unless asked; the configs here are for v4/v3.
 - **Imports:** use the `@/` alias for `src/` (`import Button from "@/components/Button"`).
 - **Layout:** `src/app/` holds routes only. `src/components/` holds shared UI (`Screen`, `Button`, `Card`), `src/hooks/` holds hooks, `src/utils/` holds helpers and `src/constants/` holds constants.
+- `patches/` holds a patch-package fix: NativeWind's css-interop registered the deprecated `ImageBackground`, which logged a warning at startup. It reapplies on `npm install` through `postinstall`. Don't use `ImageBackground`; use a `View` with an absolutely positioned `Image` instead. Delete the patch if you upgrade NativeWind or css-interop.
 - Wrap each screen in `<Screen>` so it gets safe-area padding and the background color.
 - `global.css` is imported once, in `src/app/_layout.js`. Don't import it anywhere else.
 
