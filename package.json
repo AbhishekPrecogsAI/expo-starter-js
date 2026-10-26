@@ -26,7 +26,9 @@
     "lint": "expo lint",
     "doctor": "npx expo-doctor",
     "reset-cache": "expo start -c",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "build:apk": "eas build -p android --profile preview --local",
+    "build:aab": "eas build -p android --profile production --local"
   },
   "private": true,
   "devDependencies": {
