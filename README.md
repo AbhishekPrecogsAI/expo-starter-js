@@ -77,7 +77,7 @@ npm run build:apk    # eas build -p android --profile preview --local  -> .apk
 npm run build:aab    # production .aab for the Play Store
 ```
 
-The build runs on your machine, and the `.apk` lands in the project root. EAS servers are only contacted to check the project and fetch signing credentials. The first build creates a keystore for you.
+The build runs on your machine, and the `.apk` lands in the project root. The `preview` and `development` profiles build for `arm64-v8a` only, which covers almost every modern phone. That makes builds much faster and APKs smaller. The `production` profile still builds for all architectures, for the Play Store. EAS servers are only contacted to check the project and fetch signing credentials. The first build creates a keystore for you.
 
 Install the APK on a USB-connected phone (with USB debugging on):
 
